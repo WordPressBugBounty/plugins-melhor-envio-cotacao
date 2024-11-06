@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'melhorenvio/melhorenvio-cotation',
-        'pretty_version' => 'v2.15.8',
-        'version' => '2.15.8.0',
-        'reference' => '678fca1b1ed0c3091fb0e7ea89c6f592f7c67a1d',
+        'pretty_version' => 'v2.15.9',
+        'version' => '2.15.9.0',
+        'reference' => '6e2f5bb01c536df9fc84534eb8a27ec99d9601af',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'melhorenvio/melhorenvio-cotation' => array(
-            'pretty_version' => 'v2.15.8',
-            'version' => '2.15.8.0',
-            'reference' => '678fca1b1ed0c3091fb0e7ea89c6f592f7c67a1d',
+            'pretty_version' => 'v2.15.9',
+            'version' => '2.15.9.0',
+            'reference' => '6e2f5bb01c536df9fc84534eb8a27ec99d9601af',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
