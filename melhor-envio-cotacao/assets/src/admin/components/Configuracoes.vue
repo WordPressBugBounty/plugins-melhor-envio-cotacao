@@ -63,15 +63,22 @@
   margin: 0;
 }
 .error-message {
-  width: 98%;
-  padding: 10px 0 10px 2%;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 12px 14px;
   color: #fff;
   font-weight: 600;
+  font-size: 14px;
+  line-height: 1.45;
+  background: #d63638;
+  border-radius: 4px;
+  border-left: 4px solid #8b0000;
 }
 </style>
 
 <template>
-  <div>
+  <div class="wpme_config_page">
     <div class="boxBanner">
       <img
         src="@images/banner-admin.jpeg"
@@ -79,25 +86,24 @@
     </div>
 
     <template>
-      <div>
+      <div class="wpme_config_panel wpme_config_panel--page-header">
         <div class="grid">
           <div class="col-12-12">
             <h1>Configurações gerais</h1>
           </div>
-          <hr />
           <div class="col-12-12" v-show="error_message">
             <p class="error-message">{{ error_message }}</p>
           </div>
-          <br />
         </div>
       </div>
     </template>
 
     <template v-if="originData.length > 0">
-      <div class="wpme_config">
+      <div class="wpme_config_panel">
         <h2>Seleciona a origem dos envios</h2>
+        <div class="wpme_config">
         <div class="wpme_flex">
-          <ul class="wpme_address">
+          <ul class="wpme_address wpme_origin_cards">
             <li
               v-for="option in originData"
               v-bind:value="option.id"
@@ -165,17 +171,19 @@
             </li>
           </ul>
         </div>
+        </div>
       </div>
-      <hr />
     </template>
 
     <template>
-      <div class="wpme_config" style="width: 50%">
+      <div class="wpme_config_row">
+      <div class="wpme_config_panel wpme_config_panel--split">
         <h2>Informações da etiqueta</h2>
         <p>
           As informações abaixo serão exibidas na etiqueta impressa do Melhor
           Envio
         </p>
+        <div class="wpme_config">
         <div class="wpme_flex">
           <ul class="wpme_address">
             <li>
@@ -205,7 +213,7 @@
               <span>CNPJ</span></br>
               <the-mask
                 v-model="label.company_document"
-                :mask="['##.###.###/####-##']"
+                :mask="['XX.XXX.XXX/XXXX-##', '##.###.###/####-##']"
               />
               <br />
               <br />
@@ -264,19 +272,59 @@
             </li>
           </ul>
         </div>
+        </div>
       </div>
-      <hr />
-    </template>
 
-    <div class="wpme_config" v-show="agencies.length > 0">
-      <h2>Jadlog</h2>
+      <div class="wpme_config_panel wpme_config_panel--split">
+      <h2>Embalagem padrão</h2>
       <p>
-        Escolha a agência Jadlog de sua preferência para realizar o envio dos
-        seus produtos.
+        Configure uma embalagem padrão para quando o seu produto não possuir alguma das dimensões ou peso.
       </p>
       <div class="wpme_flex">
         <ul class="wpme_address">
           <li>
+              <span>Largura</span></br>
+              <input v-model="dimension.width" data-cy="input-width-default" type="number" />
+              <br />
+              <br />
+
+              <span>Altura</span></br>
+              <input v-model="dimension.height" data-cy="input-heigt-default" type="number" />
+              <br />
+              <br />
+
+              <span>Comprimento</span></br>
+              <input v-model="dimension.length" data-cy="input-length-default" type="number" />
+              <br />
+              <br />
+
+              <span>Peso</span></br>
+              <input v-model="dimension.weight" data-cy="input-weight-default" type="number" />
+              <br />
+              <br />
+          </li>
+        </ul>
+      </div>
+      </div>
+      </div>
+    </template>
+
+    <div class="wpme_config_panel">
+      <h2>Seleção de agências</h2>
+
+    <div class="wpme_config">
+      <h2>Jadlog</h2>
+      <p v-if="agencies.length > 0">
+        Escolha a agência Jadlog de sua preferência para realizar o envio dos
+        seus produtos.
+      </p>
+      <p v-else class="description">
+        Nenhuma agência Jadlog encontrada para esta origem. Confira o endereço
+        de origem ou se existe uma agência para esta origem.
+      </p>
+      <div class="wpme_flex" v-show="agencies.length > 0">
+        <ul class="wpme_address">
+          <li class="wpme_agency_select_row">
             <template>
               <select
                 name="agencies"
@@ -301,15 +349,19 @@
     </div>
     <hr />
 
-    <div class="wpme_config" v-show="agenciesJadlogCentralized.length > 0">
+    <div class="wpme_config">
       <h2>Jadlog Centralizado</h2>
-      <p>
+      <p v-if="agenciesJadlogCentralized.length > 0">
         Escolha a agência Jadlog centralizado de sua preferência para realizar o envio dos
         seus produtos.
       </p>
-      <div class="wpme_flex">
+      <p v-else class="description">
+        Nenhuma agência Jadlog Centralizado encontrada para esta origem. Confira o endereço
+        de origem ou se existe uma agência para esta origem.
+      </p>
+      <div class="wpme_flex" v-show="agenciesJadlogCentralized.length > 0">
         <ul class="wpme_address">
-          <li>
+          <li class="wpme_agency_select_row">
             <template>
               <select
                 name="agency_jadlog_centralized"
@@ -334,15 +386,19 @@
     </div>
     <hr />
 
-    <div class="wpme_config" v-show="agenciesLoggi.length > 0">
+    <div class="wpme_config">
       <h2>Loggi</h2>
-      <p>
+      <p v-if="agenciesLoggi.length > 0">
         Escolha a agência Loggi de sua preferência para realizar o envio dos
         seus produtos.
       </p>
-      <div class="wpme_flex">
+      <p v-else class="description">
+        Nenhuma agência Loggi encontrada para esta origem. Confira o endereço
+        de origem ou se existe uma agência para esta origem.
+      </p>
+      <div class="wpme_flex" v-show="agenciesLoggi.length > 0">
         <ul class="wpme_address">
-          <li>
+          <li class="wpme_agency_select_row">
             <template>
               <select
                 name="agency_loggi"
@@ -367,15 +423,19 @@
     </div>
     <hr />
 
-    <div class="wpme_config" v-show="agenciesJeT.length > 0">
+    <div class="wpme_config">
       <h2>JeT</h2>
-      <p>
+      <p v-if="agenciesJeT.length > 0">
         Escolha a agência JeT de sua preferência para realizar o envio dos
         seus produtos.
       </p>
-      <div class="wpme_flex">
+      <p v-else class="description">
+        Nenhuma agência JeT encontrada para esta origem. Confira o endereço
+        de origem ou se existe uma agência para esta origem.
+      </p>
+      <div class="wpme_flex" v-show="agenciesJeT.length > 0">
         <ul class="wpme_address">
-          <li>
+          <li class="wpme_agency_select_row">
             <template>
               <select
                   name="agency_jet"
@@ -401,17 +461,61 @@
     <hr />
 
     <div
-      v-show="token_environment == 'production' && agenciesAzul.length > 0"
+    v-show="token_environment == 'production'"
+    class="wpme_config"
+    >
+      <h2>Total Express</h2>
+      <p v-if="agenciesTotalExpress.length > 0">
+        Escolha a agência Total Express de sua preferência para realizar o envio dos
+        seus produtos.
+      </p>
+      <p v-else class="description">
+        Nenhuma agência Total Express encontrada para esta origem. Confira o endereço
+        de origem ou se existe uma agência para esta origem.
+      </p>
+      <div class="wpme_flex" v-show="agenciesTotalExpress.length > 0">
+        <ul class="wpme_address">
+          <li class="wpme_agency_select_row">
+            <template>
+              <select
+                name="agency_totalexpress"
+                id="agency_totalexpress"
+                v-model="agency_totalexpress"
+                data-cy="input-agency-totalexpress"
+              >
+                <option value>Selecione...</option>
+                <option
+                  v-for="option in agenciesTotalExpress"
+                  :value="option.id"
+                  :key="option.id"
+                  :selected="option.selected"
+                >
+                  <strong>{{ option.name }}</strong>
+                </option>
+              </select>
+            </template>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <hr />
+
+    <div
+      v-show="token_environment == 'production'"
       class="wpme_config"
     >
       <h2>Azul Cargo Express</h2>
-      <p>
+      <p v-if="agenciesAzul.length > 0">
         Escolha a agência Azul Cargo Express de sua preferência para realizar o
         envio dos seus produtos.
       </p>
-      <div class="wpme_flex">
+      <p v-else class="description">
+        Nenhuma agência Azul Cargo Express encontrada para esta origem. Confira o endereço
+        de origem ou se existe uma agência para esta origem.
+      </p>
+      <div class="wpme_flex" v-show="agenciesAzul.length > 0">
         <ul class="wpme_address">
-          <li>
+          <li class="wpme_agency_select_row">
             <template>
               <select
                 name="agenciesAzul"
@@ -437,17 +541,21 @@
     <hr />
 
     <div
-      v-show="token_environment == 'production' && agenciesLatam.length > 0"
+      v-show="token_environment == 'production'"
       class="wpme_config"
     >
       <h2>LATAM Cargo</h2>
-      <p>
+      <p v-if="agenciesLatam.length > 0">
         Escolha a unidade Latam Cargo de sua preferência para realizar o envio
         dos seus produtos.
       </p>
-      <div class="wpme_flex">
+      <p v-else class="description">
+        Nenhuma unidade LATAM Cargo encontrada para esta origem. Confira o endereço
+        de origem ou se existe uma agência para esta origem.
+      </p>
+      <div class="wpme_flex" v-show="agenciesLatam.length > 0">
         <ul class="wpme_address">
-          <li>
+          <li class="wpme_agency_select_row">
             <template>
               <select
                 name="agenciesLatam"
@@ -469,9 +577,9 @@
         </ul>
       </div>
     </div>
-    <hr />
+    </div>
 
-    <div class="wpme_config">
+    <div class="wpme_config_panel">
       <h2>Opções para cotação</h2>
       <p>
         As opções abaixo são serviços adicionais oferecido junto com a entrega,
@@ -510,196 +618,203 @@
         </ul>
       </div>
     </div>
-    <hr />
 
-    <div class="wpme_config">
-      <h2>Embalagem padrão</h2>
-      <p>
-        Configure uma embalagem padrão para quando o seu produto não possuir alguma das dimensões ou peso.
-      </p>
-      <div class="wpme_flex">
-        <ul class="wpme_address">
-          <li>
-              <span>Largura</span></br>
-              <input v-model="dimension.width" data-cy="input-width-default" type="number" />
-              <br />
-              <br />
-
-              <span>Altura</span></br>
-              <input v-model="dimension.height" data-cy="input-heigt-default" type="number" />
-              <br />
-              <br />
-
-              <span>Comprimento</span></br>
-              <input v-model="dimension.length" data-cy="input-length-default" type="number" />
-              <br />
-              <br />
-
-              <span>Peso</span></br>
-              <input v-model="dimension.weight" data-cy="input-weight-default" type="number" />
-              <br />
-              <br />
-          </li>
-        </ul>
-      </div>
-      <hr />
-    </div>
-
-    <div class="wpme_config">
-      <h2>Calculadora</h2>
-      <p>
-        Ao habilitar essa opção, será exibida a calculadora de fretes com
-        cotações do Melhor Envio na tela do produto.
-      </p>
-      <div class="wpme_flex">
-        <ul class="wpme_address">
-          <li>
-            <label for="41352">
-              <div class="wpme_address-top" style="border-bottom: none">
-                <label for="two">exibir a calculadora na tela do produto</label>
-              </div>
-              <select
-                data-cy="input-where-calculator"
-                name="agencies"
-                id="agencies"
-                v-model="where_calculator"
-              >
-                <option
-                  v-for="option in keysWhereCalculatorCollect"
-                  :value="option"
-                  :key="option"
+    <div class="wpme_config_row">
+      <div class="wpme_config_panel wpme_config_panel--split">
+        <h2>Calculadora</h2>
+        <p>
+          Ao habilitar essa opção, será exibida a calculadora de fretes com
+          cotações do Melhor Envio na tela do produto.
+        </p>
+        <div class="wpme_flex">
+          <ul class="wpme_address">
+            <li>
+              <label for="41352">
+                <div class="wpme_address-top" style="border-bottom: none">
+                  <label for="two">exibir a calculadora na tela do produto</label>
+                </div>
+                <select
+                  data-cy="input-where-calculator"
+                  name="agencies"
+                  id="agencies"
+                  v-model="where_calculator"
                 >
-                  <strong>{{ where_calculator_collect[option] }}</strong>
-                </option>
-              </select>
-            </label>
-          </li>
-        </ul>
+                  <option
+                    v-for="option in keysWhereCalculatorCollect"
+                    :value="option"
+                    :key="option"
+                  >
+                    <strong>{{ where_calculator_collect[option] }}</strong>
+                  </option>
+                </select>
+              </label>
+            </li>
+          </ul>
+        </div>
+        <div class="wpme_config_panel__subsection">
+          <h3>Shortcode para exibir a calculadora</h3>
+          <p>
+            <b>[calculadora_melhor_envio product_id="product_id"]</b>
+          </p>
+          <p>
+            É necessário informar o ID do produto para o shortcode funcionar de
+            forma adequada
+          </p>
+        </div>
       </div>
-      <hr />
-      <h2></h2>
-      <h3>Shortcode para exibir a calculadora</h3>
-      <p>
-        <b>[calculadora_melhor_envio product_id="product_id"]</b>
-      </p>
-      <p>
-        É necessário informar o ID do produto para o shortcode funcionar de
-        forma adequada
-      </p>
-    </div>
-    <hr />
 
-    <div class="wpme_config" style="width: 50%">
-      <h2>Diretório dos plugins</h2>
-      <p>
-        Em algumas instâncias do wordpress, o caminho do diretório de plugins
-        pode ser direferente, ocorrendo falhas no plugin, sendo necessário
-        definir o caminho manualmente no campo abaixo. Tome cuidado ao realizar
-        essa ação.
-      </p>
-      <div class="wpme_flex">
-        <ul class="wpme_address">
-          <li>
-            <input
-              type="checkbox"
-              value="Personalizar"
-              v-model="show_path"
-              data-cy="input-show-path"
-            />
-            <span>Estou ciente dos riscos</span>
-            <br />
-            <br />
-            <input
-              v-show="show_path"
-              v-model="path_plugins"
-              data-cy="input-path"
-              type="text"
-              placeholder="/home/htdocs/html/wp-content/plugins"
-            />
-            <br />
-            <br />
-          </li>
-        </ul>
+      <div class="wpme_config_panel wpme_config_panel--split">
+        <h2>Diretório dos plugins</h2>
+        <p>
+          Em algumas instâncias do wordpress, o caminho do diretório de plugins
+          pode ser direferente, ocorrendo falhas no plugin, sendo necessário
+          definir o caminho manualmente no campo abaixo. Tome cuidado ao realizar
+          essa ação.
+        </p>
+        <div class="wpme_flex wpme_config_panel__path-plugins">
+          <ul class="wpme_address">
+            <li>
+              <input
+                type="checkbox"
+                value="Personalizar"
+                v-model="show_path"
+                data-cy="input-show-path"
+              />
+              <span>Estou ciente dos riscos</span>
+              <br />
+              <br />
+              <textarea
+                v-show="show_path"
+                v-model="path_plugins"
+                data-cy="input-path"
+                rows="3"
+                class="input wpme_config_panel__path-input"
+                placeholder="/home/htdocs/html/wp-content/plugins"
+              />
+              <br />
+              <br />
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
-    <hr />
 
-    <button class="btn-border -blue" @click="updateConfig">salvar</button>
+    <div class="wpme_config_page__save-wrap">
+      <button
+        type="button"
+        class="btn-border -full-blue -big wpme_config_page__save"
+        @click="updateConfig"
+      >
+        salvar
+      </button>
+    </div>
 
-    <transition name="fade">
-      <div class="me-modal" v-show="show_modal">
-        <div>
-          <p class="title">Sucesso!</p>
-          <div class="content">
-            <p class="txt">dados atualizados com sucesso!</p>
+    <transition name="wpme-modal-fade">
+      <div
+        v-show="show_modal"
+        class="wpme_modal_overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="wpme-success-title"
+        @click.self="close"
+      >
+        <div class="wpme_modal_card" @click.stop>
+          <div class="wpme_modal_icon wpme_modal_icon--success" aria-hidden="true">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M8 12l2.5 2.5 5-5" />
+            </svg>
           </div>
-          <div class="buttons -center">
-            <button type="button" @click="close" class="btn-border -full-blue">
-              Fechar
+          <h2 id="wpme-success-title" class="wpme_modal_title">
+            Configurações salvas
+          </h2>
+          <p class="wpme_modal_text">
+            Suas alterações foram aplicadas com sucesso.
+          </p>
+          <div class="wpme_modal_actions">
+            <button
+              type="button"
+              class="btn-border -full-blue -big wpme_modal_btn"
+              @click="close"
+            >
+              Entendi
             </button>
           </div>
         </div>
       </div>
     </transition>
 
-    <div class="me-modal" v-show="show_load">
-      <svg
-        style="float: left; margin-top: 10%; margin-left: 50%"
-        class="ico"
-        width="88"
-        height="88"
-        viewBox="0 0 44 44"
-        xmlns="http://www.w3.org/2000/svg"
-        stroke="#3598dc"
-      >
-        <g fill="none" fill-rule="evenodd" stroke-width="2">
-          <circle cx="22" cy="22" r="1">
-            <animate
-              attributeName="r"
-              begin="0s"
-              dur="1.8s"
-              values="1; 20"
-              calcMode="spline"
-              keyTimes="0; 1"
-              keySplines="0.165, 0.84, 0.44, 1"
-              repeatCount="indefinite"
-            />
-            <animate
-              attributeName="stroke-opacity"
-              begin="0s"
-              dur="1.8s"
-              values="1; 0"
-              calcMode="spline"
-              keyTimes="0; 1"
-              keySplines="0.3, 0.61, 0.355, 1"
-              repeatCount="indefinite"
-            />
-          </circle>
-          <circle cx="22" cy="22" r="1">
-            <animate
-              attributeName="r"
-              begin="-0.9s"
-              dur="1.8s"
-              values="1; 20"
-              calcMode="spline"
-              keyTimes="0; 1"
-              keySplines="0.165, 0.84, 0.44, 1"
-              repeatCount="indefinite"
-            />
-            <animate
-              attributeName="stroke-opacity"
-              begin="-0.9s"
-              dur="1.8s"
-              values="1; 0"
-              calcMode="spline"
-              keyTimes="0; 1"
-              keySplines="0.3, 0.61, 0.355, 1"
-              repeatCount="indefinite"
-            />
-          </circle>
-        </g>
-      </svg>
-    </div>
+    <transition name="wpme-modal-fade">
+      <div v-show="show_load" class="wpme_modal_overlay" aria-busy="true" aria-live="polite">
+        <div class="wpme_modal_card wpme_modal_card--loading">
+          <div class="wpme_modal_spinner">
+            <svg
+              width="88"
+              height="88"
+              viewBox="0 0 44 44"
+              xmlns="http://www.w3.org/2000/svg"
+              stroke="#0550a0"
+            >
+              <g fill="none" fill-rule="evenodd" stroke-width="2">
+                <circle cx="22" cy="22" r="1">
+                  <animate
+                    attributeName="r"
+                    begin="0s"
+                    dur="1.8s"
+                    values="1; 20"
+                    calcMode="spline"
+                    keyTimes="0; 1"
+                    keySplines="0.165, 0.84, 0.44, 1"
+                    repeatCount="indefinite"
+                  />
+                  <animate
+                    attributeName="stroke-opacity"
+                    begin="0s"
+                    dur="1.8s"
+                    values="1; 0"
+                    calcMode="spline"
+                    keyTimes="0; 1"
+                    keySplines="0.3, 0.61, 0.355, 1"
+                    repeatCount="indefinite"
+                  />
+                </circle>
+                <circle cx="22" cy="22" r="1">
+                  <animate
+                    attributeName="r"
+                    begin="-0.9s"
+                    dur="1.8s"
+                    values="1; 20"
+                    calcMode="spline"
+                    keyTimes="0; 1"
+                    keySplines="0.165, 0.84, 0.44, 1"
+                    repeatCount="indefinite"
+                  />
+                  <animate
+                    attributeName="stroke-opacity"
+                    begin="-0.9s"
+                    dur="1.8s"
+                    values="1; 0"
+                    calcMode="spline"
+                    keyTimes="0; 1"
+                    keySplines="0.3, 0.61, 0.355, 1"
+                    repeatCount="indefinite"
+                  />
+                </circle>
+              </g>
+            </svg>
+          </div>
+          <p class="wpme_modal_loading_text">Carregando…</p>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -729,6 +844,7 @@ export default {
       agency_azul: null,
       agency_latam: null,
       agency_jet: null,
+      agency_totalexpress: null,
       show_modal: false,
       custom_calculator: false,
       show_calculator: false,
@@ -771,6 +887,7 @@ export default {
       agencyAzulSelected_: "getAgencyAzulSelected",
       agencyLatamSelected_: "getAgencyLatamSelected",
       agencyJeTSelected_: "getAgencyJeTSelected",
+      agencyTotalExpressSelected_: "getAgencyTotalExpressSelected",
       agencies: "getAgencies",
       agenciesJadlogCentralized: "getAgenciesJadlogCentralized",
       agenciesCorreiosCentralized: "getAgenciesCorreiosCentralized",
@@ -778,6 +895,7 @@ export default {
       agenciesAzul: "getAgenciesAzul",
       agenciesLatam: "getAgenciesLatam",
       agenciesJeT: "getAgenciesJeT",
+      agenciesTotalExpress: "getAgenciesTotalExpress",
       allAgencies: "getAllAgencies",
       style_calculator: "getStyleCalculator",
       methods_shipments: "getMethodsShipments",
@@ -804,6 +922,7 @@ export default {
       "setAgenciesLoggi",
       "setAgenciesLatam",
       "setAgenciesJeT",
+      "setAgenciesTotalExpress",
       "setAgencies",
       "saveAll",
       "getEnvironment",
@@ -830,10 +949,14 @@ export default {
       data["agency_loggi"] = this.agency_loggi;
       data["agency_latam"] = this.agency_latam;
       data["agency_jet"] = this.agency_jet;
+      data["agency_totalexpress"] = this.agency_totalexpress;
       data["show_calculator"] = this.show_calculator;
       data["show_all_agencies_jadlog"] = this.show_all_agencies_jadlog;
       data["where_calculator"] = this.where_calculator;
-      data["path_plugins"] = this.path_plugins;
+      data["path_plugins"] =
+        typeof this.path_plugins === "string"
+          ? this.path_plugins.replace(/\r\n|\r|\n/g, "").trim()
+          : this.path_plugins;
       data["options_calculator"] = this.options_calculator;
       data["dimension_default"] = this.dimension;
 
@@ -857,6 +980,7 @@ export default {
       this.showLoggiAgencies(data);
       this.showALatamAgencies(data);
       this.showJeTAgencies(data);
+      this.showTotalExpressAgencies(data);
     },
     setOrigin(id) {
       if (this.originData.length > 0) {
@@ -992,7 +1116,7 @@ export default {
     },
     showJadlogCentralizedAgencies(data) {
       this.setLoader(true);
-      this.agency_jadlog_cetralized = "";
+      this.agency_jadlog_centralized = "";
       var responseAgenciesJadlogCentralized = [];
       var promiseAgencies = new Promise((resolve, _reject) => {
         this.$http
@@ -1004,7 +1128,7 @@ export default {
             }
           })
           .catch((error) => {
-            this.setAgenciesjadlogCentralized([]);
+            this.setAgenciesJadlogCentralized([]);
           })
           .finally(() => {
             this.setLoader(false);
@@ -1012,7 +1136,7 @@ export default {
       });
 
       promiseAgencies.then((resolve) => {
-        //this.setAgenciesjadlogCentralized(responseAgenciesjadlogCentralized);
+        this.setAgenciesJadlogCentralized(responseAgenciesJadlogCentralized);
         this.setLoader(false);
       });
     },
@@ -1068,6 +1192,42 @@ export default {
         this.setLoader(false);
       });
     },
+    showTotalExpressAgencies(data) {
+      const companyId =
+        typeof wpApiSettingsMelhorEnvio !== "undefined" &&
+        wpApiSettingsMelhorEnvio.company_total_express != null
+          ? wpApiSettingsMelhorEnvio.company_total_express
+          : 8;
+      const serviceId =
+        typeof wpApiSettingsMelhorEnvio !== "undefined" &&
+        wpApiSettingsMelhorEnvio.service_total_express_standard != null
+          ? wpApiSettingsMelhorEnvio.service_total_express_standard
+          : 35;
+      this.setLoader(true);
+      this.agency_totalexpress = "";
+      var responseAgenciesTotalExpress = [];
+      var promiseAgencies = new Promise((resolve, _reject) => {
+        this.$http
+          .post(this.createAjaxUrl(companyId, data, serviceId))
+          .then(function (response) {
+            if (response && response.status === 200) {
+              responseAgenciesTotalExpress = response.data;
+              resolve(true);
+            }
+          })
+          .catch((error) => {
+            this.setAgenciesTotalExpress([]);
+          })
+          .finally(() => {
+            this.setLoader(false);
+          });
+      });
+
+      promiseAgencies.then((resolve) => {
+        this.setAgenciesTotalExpress(responseAgenciesTotalExpress);
+        this.setLoader(false);
+      });
+    },
     close() {
       this.show_modal = false;
     },
@@ -1082,17 +1242,30 @@ export default {
       let val = value == 1 ? value + " dia" : value + " dias";
       return val;
     },
+    goToTokenIfNeeded() {
+      if (this.$route.name !== "Token") {
+        this.$router.push({ name: "Token" }).catch(() => {});
+      }
+    },
     getToken() {
       this.$http.get(verifyToken()).then((response) => {
         if (!response.data.exists_token) {
-          this.$router.push("Token");
+          this.goToTokenIfNeeded();
         }
-
         this.validateToken();
       });
     },
     validateToken() {
       this.$http.get(getToken()).then((response) => {
+        const env = response.data.token_environment || "production";
+        if (env === "sandbox") {
+          if (response.data.token_sandbox) {
+            this.error_message = "";
+          } else {
+            this.goToTokenIfNeeded();
+          }
+          return;
+        }
         if (response.data.token) {
           if (isDateTokenExpired(response.data.token)) {
             this.error_message =
@@ -1101,7 +1274,7 @@ export default {
             this.error_message = "";
           }
         } else {
-          this.$router.push("Token");
+          this.goToTokenIfNeeded();
         }
       });
     },
@@ -1193,6 +1366,17 @@ export default {
       }
       this.setLoader(false);
     },
+    agenciesTotalExpress() {
+      this.setLoader(true);
+      if (this.agenciesTotalExpress.length > 0) {
+        this.agenciesTotalExpress.filter((item) => {
+          if (item.selected) {
+            this.agency_totalexpress = item.id;
+          }
+        });
+      }
+      this.setLoader(false);
+    },
     agencySelected_(e) {
       this.agency = e;
     },
@@ -1213,6 +1397,9 @@ export default {
     },
     agencyJeTSelected_(e) {
       this.agency_jet = e;
+    },
+    agencyTotalExpressSelected_(e) {
+      this.agency_totalexpress = e;
     },
     show_calculator_(e) {
       this.show_calculator = e;
@@ -1237,9 +1424,210 @@ export default {
     promiseConfigs.then((resolve) => {
       this.setLoader(false);
     });
+    this._onModalSuccessEscape = (e) => {
+      if (e.key === "Escape" && this.show_modal) {
+        this.close();
+      }
+    };
+    document.addEventListener("keydown", this._onModalSuccessEscape);
+  },
+  beforeDestroy() {
+    if (this._onModalSuccessEscape) {
+      document.removeEventListener("keydown", this._onModalSuccessEscape);
+    }
   },
 };
 </script>
 
 <style lang="css" scoped>
+.wpme_config_page {
+  clear: both;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans,
+    Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #1d2327;
+}
+
+.wpme_config_page__save-wrap {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin: 16px 0 8px;
+  clear: both;
+}
+
+.wpme_config_page__save-wrap .wpme_config_page__save.btn-border {
+  font-family: inherit;
+  font-size: 15px;
+  letter-spacing: 0.06em;
+}
+
+.wpme_config_page__save-wrap .btn-border.-full-blue:hover {
+  background-color: #043d7a;
+  color: #fff;
+  border-color: #043d7a;
+}
+
+.wpme_config_panel {
+  clear: both;
+  margin: 0 0 24px;
+  padding: 20px 24px 24px;
+  border: 1px solid #c8d0dc;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #f4f7fb 0%, #ffffff 56px);
+  box-shadow: 0 1px 4px rgba(5, 80, 160, 0.07);
+}
+
+.wpme_config_panel--narrow {
+  max-width: 50%;
+  width: 100%;
+}
+
+.wpme_config_row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  align-items: stretch;
+  margin: 0 0 24px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.wpme_config_row .wpme_config_panel--split {
+  min-width: 0;
+  max-width: none;
+  margin-bottom: 0;
+}
+
+@media (max-width: 782px) {
+  .wpme_config_panel--narrow {
+    max-width: 100%;
+  }
+
+  .wpme_config_row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.wpme_config_panel--page-header {
+  margin-top: 0;
+}
+
+.wpme_config_panel--page-header h1 {
+  margin: 0 0 8px;
+  padding-bottom: 12px;
+  font-size: 1.35rem;
+  font-weight: 400;
+  color: #0550a0;
+}
+
+.wpme_config_panel > h2 {
+  margin: 0 0 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #dde3ec;
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: #0550a0;
+}
+
+.wpme_config_panel > hr {
+  border: none;
+  border-top: 1px solid #e5e9f0;
+  margin: 18px 0;
+}
+
+.wpme_config_panel__subsection {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid #e5e9f0;
+}
+
+.wpme_config_panel__subsection h3 {
+  margin: 0 0 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #464646;
+}
+
+.wpme_origin_cards {
+  float: none;
+  flex: 1 1 100%;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+  width: 100%;
+  list-style: none;
+}
+
+.wpme_origin_cards > li {
+  float: none;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  width: auto;
+  max-width: none;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.wpme_origin_cards > li > label {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 100%;
+  cursor: pointer;
+}
+
+.wpme_origin_cards .wpme_address-body {
+  flex: 1;
+}
+
+.wpme_config_panel__path-plugins {
+  overflow-x: hidden;
+  min-width: 0;
+}
+
+.wpme_config_panel__path-plugins .wpme_address {
+  width: 100%;
+  max-width: 100%;
+}
+
+.wpme_config_panel__path-plugins .wpme_address > li {
+  max-width: none;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.wpme_config_panel__path-input {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  min-height: 72px;
+  height: auto;
+  line-height: 1.4;
+  resize: vertical;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.wpme_agency_select_row {
+  display: block !important;
+  width: 100% !important;
+  max-width: 560px !important;
+  min-width: 0 !important;
+  box-sizing: border-box;
+}
+
+.wpme_agency_select_row select {
+  display: block;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
 </style>

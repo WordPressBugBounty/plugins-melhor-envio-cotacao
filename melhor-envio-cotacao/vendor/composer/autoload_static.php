@@ -7,7 +7,7 @@ namespace Composer\Autoload;
 class ComposerStaticInit86344c9ce8ce3fa0f49736e7e62fe6e5
 {
     public static $prefixLengthsPsr4 = array (
-        'M' => 
+        'M' =>
         array (
             'MelhorEnvio\\Services\\' => 21,
             'MelhorEnvio\\Models\\' => 19,
@@ -20,31 +20,31 @@ class ComposerStaticInit86344c9ce8ce3fa0f49736e7e62fe6e5
     );
 
     public static $prefixDirsPsr4 = array (
-        'MelhorEnvio\\Services\\' => 
+        'MelhorEnvio\\Services\\' =>
         array (
             0 => __DIR__ . '/../..' . '/Services',
         ),
-        'MelhorEnvio\\Models\\' => 
+        'MelhorEnvio\\Models\\' =>
         array (
             0 => __DIR__ . '/../..' . '/Models',
         ),
-        'MelhorEnvio\\Interfaces\\' => 
+        'MelhorEnvio\\Interfaces\\' =>
         array (
             0 => __DIR__ . '/../..' . '/core/interfaces',
         ),
-        'MelhorEnvio\\Helpers\\' => 
+        'MelhorEnvio\\Helpers\\' =>
         array (
             0 => __DIR__ . '/../..' . '/Helpers',
         ),
-        'MelhorEnvio\\Factory\\' => 
+        'MelhorEnvio\\Factory\\' =>
         array (
             0 => __DIR__ . '/../..' . '/Factory',
         ),
-        'MelhorEnvio\\Controllers\\' => 
+        'MelhorEnvio\\Controllers\\' =>
         array (
             0 => __DIR__ . '/../..' . '/Controllers',
         ),
-        'MelhorEnvio\\Bases\\' => 
+        'MelhorEnvio\\Bases\\' =>
         array (
             0 => __DIR__ . '/../..' . '/core/bases',
         ),
