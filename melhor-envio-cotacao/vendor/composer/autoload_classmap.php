@@ -76,6 +76,7 @@ return array(
     'MelhorEnvio\\Services\\LocationService' => $baseDir . '/Services/LocationService.php',
     'MelhorEnvio\\Services\\ManageRequestService' => $baseDir . '/Services/ManageRequestService.php',
     'MelhorEnvio\\Services\\NoticeFormService' => $baseDir . '/Services/NoticeFormService.php',
+    'MelhorEnvio\\Services\\NoticeInterviewService' => $baseDir . '/Services/NoticeInterviewService.php',
     'MelhorEnvio\\Services\\OptionsMethodShippingService' => $baseDir . '/Services/OptionsMethodShippingService.php',
     'MelhorEnvio\\Services\\OrderInvoicesService' => $baseDir . '/Services/OrderInvoicesService.php',
     'MelhorEnvio\\Services\\OrderQuotationService' => $baseDir . '/Services/OrderQuotationService.php',
