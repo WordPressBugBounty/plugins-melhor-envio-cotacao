@@ -121,7 +121,6 @@ class ComposerStaticInit86344c9ce8ce3fa0f49736e7e62fe6e5
         'MelhorEnvio\\Services\\LocationService' => __DIR__ . '/../..' . '/Services/LocationService.php',
         'MelhorEnvio\\Services\\ManageRequestService' => __DIR__ . '/../..' . '/Services/ManageRequestService.php',
         'MelhorEnvio\\Services\\NoticeFormService' => __DIR__ . '/../..' . '/Services/NoticeFormService.php',
-        'MelhorEnvio\\Services\\NoticeInterviewService' => __DIR__ . '/../..' . '/Services/NoticeInterviewService.php',
         'MelhorEnvio\\Services\\OptionsMethodShippingService' => __DIR__ . '/../..' . '/Services/OptionsMethodShippingService.php',
         'MelhorEnvio\\Services\\OrderInvoicesService' => __DIR__ . '/../..' . '/Services/OrderInvoicesService.php',
         'MelhorEnvio\\Services\\OrderQuotationService' => __DIR__ . '/../..' . '/Services/OrderQuotationService.php',
