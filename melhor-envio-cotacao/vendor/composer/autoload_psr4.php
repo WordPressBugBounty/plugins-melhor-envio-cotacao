@@ -6,11 +6,12 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'MelhorEnvio\\Services\\' => array($baseDir . '/Services'),
-    'MelhorEnvio\\Models\\' => array($baseDir . '/Models'),
-    'MelhorEnvio\\Interfaces\\' => array($baseDir . '/core/interfaces'),
-    'MelhorEnvio\\Helpers\\' => array($baseDir . '/Helpers'),
-    'MelhorEnvio\\Factory\\' => array($baseDir . '/Factory'),
-    'MelhorEnvio\\Controllers\\' => array($baseDir . '/Controllers'),
-    'MelhorEnvio\\Bases\\' => array($baseDir . '/core/bases'),
+    'MelhorEnvio\\Services\\' => array($baseDir . '/legacy/Services'),
+    'MelhorEnvio\\Models\\' => array($baseDir . '/legacy/Models'),
+    'MelhorEnvio\\Interfaces\\' => array($baseDir . '/legacy/core/interfaces'),
+    'MelhorEnvio\\Helpers\\' => array($baseDir . '/legacy/Helpers'),
+    'MelhorEnvio\\Factory\\' => array($baseDir . '/legacy/Factory'),
+    'MelhorEnvio\\Controllers\\' => array($baseDir . '/legacy/Controllers'),
+    'MelhorEnvio\\Bases\\' => array($baseDir . '/legacy/core/bases'),
+    'MelhorEnvio\\' => array($baseDir . '/src'),
 );
