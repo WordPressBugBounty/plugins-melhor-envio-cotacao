@@ -3,17 +3,17 @@
 Plugin Name: Melhor Envio
 Plugin URI: https://melhorenvio.com.br
 Description: Cotação, compra de etiquetas e gestão de fretes, com conexão automática à sua conta Melhor Envio e toda a gestão centralizada em um painel integrado.
-Version: 3.0.6
+Version: 3.0.7
 Author: Melhor Envio
 Author URI: https://melhorenvio.com.br
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Text Domain: melhor-envio-cotacao
 Requires Plugins: woocommerce
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.4
 WC requires at least: 4.0
-WC tested up to: 10.8
+WC tested up to: 11.2
 Domain Path: /languages
 */
 
@@ -134,17 +134,18 @@ final class Melhor_Envio_Plugin
 
         array_unshift($links, $settings_link);
 
-        if ($isIntegrador) {
-            $rollback_url = wp_nonce_url(
-                admin_url('admin-post.php?action=melhor_envio_set_mode&mode=legacy'),
-                'melhor_envio_mode_nonce'
-            );
-            $links[] = sprintf(
-                '<a href="%s">%s</a>',
-                esc_url($rollback_url),
-                esc_html__('Voltar para versão anterior', 'melhor-envio-cotacao')
-            );
-        }
+        $target_mode = $isIntegrador ? 'legacy' : 'integrador';
+        $mode_url = wp_nonce_url(
+            admin_url('admin-post.php?action=melhor_envio_set_mode&mode=' . $target_mode),
+            'melhor_envio_mode_nonce'
+        );
+        $links[] = sprintf(
+            '<a href="%s">%s</a>',
+            esc_url($mode_url),
+            $isIntegrador
+                ? esc_html__('Voltar para versão anterior', 'melhor-envio-cotacao')
+                : esc_html__('Migrar para nova versão', 'melhor-envio-cotacao')
+        );
 
         return $links;
     }
@@ -229,7 +230,9 @@ final class Melhor_Envio_Plugin
         }
 
         if (is_admin()) {
-            (new SessionNoticeService())->showNotices();
+            if (!\MelhorEnvio\Services\Admin\PluginModeService::isIntegradorMode()) {
+                (new SessionNoticeService())->showNotices();
+            }
             $result = (new CheckHealthService())->checkPathPlugin($pathPlugins);
 
             if (!empty($result['errors'])) {
